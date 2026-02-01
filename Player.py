@@ -1,7 +1,4 @@
-from turtle import Screen
 
-position = [-80, -40, 0, 40, 80, 120]
-turtle_color = ["red", "green", "blue", "black", "brown", "orange"]
 
 class PlayerNumber:
     def __init__(self, player):

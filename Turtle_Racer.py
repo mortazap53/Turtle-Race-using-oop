@@ -1,10 +1,17 @@
 from turtle import Turtle
-from turtle_game import turtle_position, turtle_color
+
+turtle_position = [-80, -40, 0, 40, 80, 120]
+turtle_color = ["red", "green", "blue", "black", "brown", "orange"]
 
 class Racers:
     def __init__(self, players_numbers):
+        self.turtles = []
+        self.turtle_racers(players_numbers)
+    def turtle_racers(self, players_numbers):
         for number in range(players_numbers):
-            self.new_turtle = Turtle(shape="turtle")
-            self.new_turtle.color(turtle_color[number])
-            self.new_turtle.penup()
-            self.new_turtle.goto(-300, y=turtle_position[number])
+            new_turtle = Turtle(shape="turtle")
+            new_turtle.color(turtle_color[number])
+            new_turtle.penup()
+            new_turtle.goto(-300, y=turtle_position[number])
+            self.turtles.append(new_turtle)
+        return self.turtles

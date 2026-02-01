@@ -1,5 +1,8 @@
-from turtle_game import Game
+from turtle_game import TurtleGame
 
 if __name__ == '__main__':
-    game = Game()
+    game = TurtleGame()
     game.start_playing()
+
+    print(game.players)
+    print()
