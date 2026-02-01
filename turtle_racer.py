@@ -14,4 +14,3 @@ class Racers:
             new_turtle.penup()
             new_turtle.goto(-300, y=turtle_position[number])
             self.turtles.append(new_turtle)
-        return self.turtles

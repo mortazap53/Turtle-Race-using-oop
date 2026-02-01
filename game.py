@@ -1,23 +1,28 @@
-from Turtle_Racer import Racers, turtle_color
-from Player import PlayerNumber
-from turtle import Turtle, Screen
-import random
+from turtle_racer import Racers, turtle_color
+from bet_result import GetResult
+from turtle import Screen
+from race import Run
 
 class TurtleGame:
     def __init__(self):
-        self.count_of_players = int(input("How many players do you have? (1-6) ==>\n"))
+        self.count_of_players = int(input("How many players do you have? (1-6)\n==> "))
         self.screen = Screen()
         self.screen.setup(width=800, height=600)
         self.screen.title("Turtle Race")
-        self.turtle = []
+        self.turtles = []
         self.players = {}
-        self.turtles_rating = {}
         self.is_race_on = False
+        self.race = None
+        self.get_result = None
 
 
     def start_playing(self):
         self.number_of_players()
-        self.turtle = Racers(self.count_of_players)
+        self.turtles = Racers(self.count_of_players).turtles
+        self.race = Run(self.players, self.turtles)
+        self.get_result = GetResult(self.race.turtles_rating, self.players)
+        self.keep_screen()
+
 
     def number_of_players(self):
         for numbers in range(self.count_of_players):
@@ -27,3 +32,6 @@ class TurtleGame:
                 prompt=f"Which turtle your are betting on:"
                        f" {turtle_color[0:self.count_of_players]}: ").lower()
             self.players[f"{player_name}"] = bet_color
+
+    def keep_screen(self):
+       self.screen.exitonclick()
