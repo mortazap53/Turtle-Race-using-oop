@@ -1,0 +1,270 @@
+# 🐢 Turtle Race Game — Documentation
+
+## 1. Project Overview
+
+The project is modular and split across multiple files, each with a specific responsibility:
+
+* Game orchestration
+* Turtle creation
+* Race logic
+* Result evaluation
+
+This documentation explains **how the system works**, **how to reuse it**, and **how you can change it carefully** without breaking it.
+
+---
+
+## 2. File Structure
+
+```
+project
+│
+├── main.py            # Entry point (user inputs + game start)
+├── game.py            # Main game controller
+├── turtle_racer.py    # Turtle creation logic
+├── race.py            # Race engine
+├── bet_result.py      # Bet evaluation & result output
+```
+
+---
+
+## 3. High-Level Flow (IMPORTANT)
+
+Understanding this flow is mandatory before modifying anything.
+
+1. `main.py`
+
+   * Asks how many players
+   * Asks for turtle colors
+   * Asks for turtle positions
+   * Creates a `TurtleGame` object
+   * Starts the game
+
+2. `Game.make_racers()`
+
+   * Creates turtle racers
+   * Collects player names and bets
+
+3. `Game.start_game()`
+
+   * Runs the race
+
+4. `Game.get_result()`
+
+   * Evaluates results
+
+5. `Run`
+
+   * Moves turtles randomly
+   * Tracks their x‑coordinates
+   * Stops when race ends
+
+6. `GetResult`
+
+   * Sorts turtles by distance
+   * Matches bets to results
+   * Prints winners
+
+---
+
+## 4. main.py (Entry Point)
+
+### Purpose
+
+Acts as the **launcher**. Nothing more.
+
+### What You Can Change Safely
+
+* Turtle colors list
+* Turtle starting positions
+* Number of players range (2–6)
+
+### Critical Rules
+
+* `turtle_color` and `turtle_position` **must match or exceed** number of players
+* Do NOT bring game logic into `main.py`
+
+### Example Customization
+
+```python
+turtle_color = ["purple", "cyan", "pink"]
+turtle_position = [0, -50, 50]
+```
+
+---
+
+## 5. game.py — `TurtleGame` (Core Controller)
+
+### Purpose
+
+This is the **brain of the project**. It coordinates everything.
+
+### Constructor
+
+```python
+TurtleGame(players_number, turtles_positions, turtles_colors)
+```
+
+| Parameter           | Meaning                   |
+| ------------------- | ------------------------- |
+| `players_number`    | Number of players/turtles |
+| `turtles_positions` | List of Y positions       |
+| `turtles_colors`    | List of turtle colors     |
+
+### Key Attributes
+
+| Attribute                | Role                                   |
+| ------------------------ | -------------------------------------- |
+| `self.players`           | Dictionary: `{player_name: bet_color}` |
+| `self.object_turtles`    | Instance of `MakingRacers`             |
+| `self.object_race`       | Instance of `Run`                      |
+| `self.object_get_result` | Instance of `GetResult`                |
+
+### Methods
+
+#### `play_game()`
+
+Runs the full game pipeline in correct order.
+
+tip =====> **Order matters. If you change it, the game breaks.**
+
+#### `make_racer()`
+
+* Call the class MakingRacers
+* Creates turtles with the given data by main.py
+* Give it color
+* Give it shap
+* And store the turtles inside `self.turtles`
+
+#### `start_game()`
+
+* Call the Run class and start the race
+* Move the turtles, giving them random steps (0 - 10)
+* Store their total steps via their colors inside `self.turtles_rating`
+
+#### `get_result()`
+
+* Call or make an object using the GetResult class
+* It gives the result
+
+tip ====> it print the result by itself
+
+#### `number_of_players()`
+
+* Collects player names
+* Collects betting color
+* Stores bets in `self.players`
+
+#### `keep_screen()`
+
+Keeps the turtle window open.
+
+---
+
+## 6. turtle_racer.py — `MakingRacers`
+
+### Purpose
+
+Creates turtle objects and places them on the screen.
+
+### Constructor
+
+```python
+MakingRacers(count_of_players, turtle_color, turtle_position)
+```
+
+### Internal Behavior
+
+* Creates one turtle per player
+* Assigns unique colors
+* Assigns **random but non‑overlapping** Y positions
+
+---
+
+## 7. race.py — `Run`
+
+### Purpose
+
+Handles turtle movement and determines when the race ends.
+
+### Constructor Logic
+
+```python
+Run(players, turtles)
+```
+
+* Race starts **only if at least one player has a bet** it is checked by the function `check_values`
+* Movement is random per frame
+
+### Race Rules
+
+* Turtles move forward randomly (0–10)
+* If turtle goes beyond +350 → turns around
+* If turtle reaches −350 → race stops
+
+### Output
+
+```python
+self.turtles_rating = {color: x_position}
+```
+
+Used later to determine winners.
+
+---
+
+## 8. bet_result.py — `GetResult`
+
+### Purpose
+
+Evaluates bets and prints results.
+
+### Input
+
+```python
+GetResult(turtles_rating, players)
+```
+
+### Logic
+
+* Sorts turtles by distance
+* Matches top 3 turtles to player bets
+* Prints winners or turtle colors
+
+### Sorting Rule
+
+```python
+sorted(turtles_rating.items(), key=lambda item: item[1])
+```
+
+Lowest X value = first position (counter‑intuitive). it is why, the turtles turn around and when they come back they take negative values.
+
+
+---
+
+## 9. How to Reuse This Project
+
+This project is a <<<multi‑player Turtle Racing betting game>>> built with Python’s `turtle` graphics library. Players place bets on turtle colors, turtles race across the screen with random movement, and the game announces winners based on precedence of reaching the final position.
+
+### Change Number of Players
+
+* Update input range in `main.py`
+* Ensure color & position lists are long enough
+
+### Change Turtle Speed
+
+In `race.py`:
+
+```python
+random.randint(0, 20)
+```
+
+### Change Winning Positions
+
+Modify `GetResult` to support more than 3 winners.
+
+### Add Input Validation (Recommended)
+
+Ensure players can only bet on existing colors.
+
+---
+
+Use this documentation as your contract: follow it, and the game won’t collapse.

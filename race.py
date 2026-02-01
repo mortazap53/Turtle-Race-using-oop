@@ -4,6 +4,9 @@ class Run:
     def __init__(self, players, turtles):
         self.is_race_on = False
         self.turtles_rating = {}
+        self.check_values(players, turtles)
+
+    def check_values(self, players, turtles):
         for values in players.values():
             if values:
                 self.is_race_on = True

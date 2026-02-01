@@ -3,7 +3,7 @@ from bet_result import GetResult
 from turtle import Screen
 from race import Run
 
-class TurtleGame:
+class Game:
     def __init__(self, players_number, turtles_positions, turtles_colors):
         self.positions = turtles_positions
         self.colors = turtles_colors
@@ -16,14 +16,23 @@ class TurtleGame:
         self.object_race = None
         self.object_get_result = None
 
+    def play_game(self):
+        self.make_racers()
+        self.number_of_players()
+        self.start_game()
+        self.get_result()
 
-    def start_playing(self):
+
+    def make_racers(self):
         self.object_turtles = MakingRacers(count_of_players=self.players_number,
                                     turtle_position=self.positions,
                                     turtle_color=self.colors)
-        self.number_of_players()
+
+    def start_game(self):
         self.object_race = Run(players=self.players,
                         turtles=self.object_turtles.turtles)
+
+    def get_result(self):
         self.object_get_result = GetResult(turtles_rating=self.object_race.turtles_rating,
                                     players=self.players)
         self.keep_screen()
@@ -35,7 +44,7 @@ class TurtleGame:
                 prompt="What is your name?").title()
             bet_color = self.screen.textinput(title="Make your bet",
                 prompt=f"Which turtle your are betting on:"
-                       f"{self.object_turtles.turtle_color[0:self.players_number]}: ").lower()
+                       f"{self.colors[0:self.players_number]}: ").lower()
             self.players[f"{player_name}"] = bet_color
 
     def keep_screen(self):
